@@ -1,28 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Loader } from '../components/Loader';
-import { Person } from '../types';
-import { getPeople } from '../api';
 import { PeopleTable } from '../components/PeopleTable/PeopleTable ';
+import { PeopleContext } from '../store/PeopleStore';
 
 export const PeoplePage = () => {
-  const [people, setPeople] = useState<Person[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const context = useContext(PeopleContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchPerson = await getPeople();
-
-        setPeople(fetchPerson);
-      } catch (error) {
-        throw error;
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { people, isPeopleLoading } = context;
 
   return (
     <>
@@ -31,7 +15,7 @@ export const PeoplePage = () => {
       </div>
       <div className="block">
         <div className="box table-container">
-          {isLoading ? (
+          {isPeopleLoading ? (
             <Loader />
           ) : (
             <>
